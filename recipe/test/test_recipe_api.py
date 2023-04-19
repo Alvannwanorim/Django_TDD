@@ -9,7 +9,10 @@ from rest_framework .test import APIClient
 
 from core.models import Recipe
 
-from recipe.serializers import RecipeSerializer
+from recipe.serializers import (
+    RecipeSerializer,
+    RecipeDetailsSerializer
+)
 
 RECIPE_URL = reverse('recipe:recipe-list')
 
@@ -65,7 +68,7 @@ class PrivateRecipeApiTest(TestCase):
 
     def test_recipe_list_limited_to_user(self):
         other_user = get_user_model().objects.create_user(
-            'test@example.com',
+            'test1@example.com',
             'testPass123',
         )
 
