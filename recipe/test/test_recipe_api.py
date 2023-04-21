@@ -183,7 +183,7 @@ class PrivateRecipeApiTest(TestCase):
         self.assertFalse(Recipe.objects.filter(id=recipe.id).exists())
 
     def test_delete_other_user_recipe_return_error(self):
-        """Test deleteother user recipe return error"""
+        """Test delete other user recipe return error"""
         new_user = create_user(email='test12@example.com', password='test123')
         recipe = create_recipe(user=new_user)
 
