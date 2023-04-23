@@ -247,14 +247,13 @@ class PrivateRecipeApiTest(TestCase):
         """Tets creating tag on update"""
 
         recipe = create_recipe(user=self.user)
-        payload = {'name': 'Lunch'}
+        payload = {'tags': [{'name': 'Lunch'}]}
         url = detail_url(recipe.id)
 
         res = self.client.patch(url, payload, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         new_tag = Tag.objects.get(user=self.user, name='Lunch')
-        print(new_tag)
         self.assertIn(new_tag, recipe.tags.all())
 
     def test_update_recipe_assign_tag(self):
@@ -263,7 +262,7 @@ class PrivateRecipeApiTest(TestCase):
         recipe = create_recipe(user=self.user)
         recipe.tags.add(tag_breakfast)
 
-        tag_lunch = Tag.objects.create(user=self.user, name='name')
+        tag_lunch = Tag.objects.create(user=self.user, name='Lunch')
         payload = {'tags': [{'name': 'Lunch'}]}
         url = detail_url(recipe.id)
         res = self.client.patch(url, payload, format='json')
