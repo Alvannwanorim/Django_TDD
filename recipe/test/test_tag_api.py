@@ -8,7 +8,12 @@ from rest_framework import status
 from core.models import Tag
 from recipe.serializers import TagSerializer
 
-TAG_URL = reverse('recipe"list-tag')
+TAG_URL = reverse('recipe:tag-list')
+
+
+def details_url(tag_id):
+    """Create and tag detail url"""
+    return reverse('recipe:tag-detail', args=[tag_id])
 
 
 def create_user(email='test@user.com', password='test123'):
@@ -59,3 +64,16 @@ class PrivateTagApiTests(TestCase):
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['name'], tag.name)
         self.assertEqual(res.data[0]['id'], tag.id)
+
+    def test_update_tag(self):
+        """Test updating a tag"""
+        tag = Tag.objects.create(user=self.user, name='After Dinner')
+
+        payload = {'name': 'Dessert'}
+
+        url = details_url(tag.id)
+        res = self.client.patch(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        tag.refresh_from_db()
+        self.assertEqual(tag.name, payload['name'])
